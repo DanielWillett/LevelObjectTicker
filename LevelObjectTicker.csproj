@@ -1,0 +1,93 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net481</TargetFramework>
+    <AssemblyTitle>SampleRocketPlugin</AssemblyTitle>
+    <Product>SampleRocketPlugin</Product>
+    <Copyright>Copyright ©  2023</Copyright>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Title>Sample Rocket Plugin</Title>
+    <Description>A sample rocket pluigin.</Description>
+    <PackageProjectUrl>https://github.com/user/project</PackageProjectUrl>
+    <PackageTags>Plugin; Rocket; RocketMod4; Unturned</PackageTags>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <DefineConstants>$(DefineConstants);SERVER</DefineConstants>
+    <NoWarn>1701;1702,1591,1587,1711,1735,1573,1574,1570,1584,1658</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <DefineConstants>$(DefineConstants);SERVER</DefineConstants>
+    <NoWarn>1701;1702,1591,1587,1711,1735,1573,1574,1570,1584,1658</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Unturned_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="com.rlabrecque.steamworks.net">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Unturned_Data\Managed\com.rlabrecque.steamworks.net.dll</HintPath>
+    </Reference>
+    <Reference Include="Rocket.API">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Extras\Rocket.Unturned\Rocket.API.dll</HintPath>
+    </Reference>
+    <Reference Include="Rocket.Core">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Extras\Rocket.Unturned\Rocket.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Rocket.Unturned">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Extras\Rocket.Unturned\Rocket.Unturned.dll</HintPath>
+    </Reference>
+    <Reference Include="SDG.NetPak.Runtime">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Unturned_Data\Managed\SDG.NetPak.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="SDG.NetTransport">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Unturned_Data\Managed\SDG.NetTransport.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="SystemEx">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Unturned_Data\Managed\SystemEx.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Unturned_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Unturned_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Unturned_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEx">
+      <HintPath>..\..\..\..\..\SteamCMD\steamapps\common\U3DS\Unturned_Data\Managed\UnityEx.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Using Remove="System.Net.Http" />
+    <Using Remove="System.Text" />
+    <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+    <Using Include="Rocket.API" />
+    <Using Include="Rocket.API.Collections" />
+    <Using Include="Rocket.Core" />
+    <Using Include="Rocket.Core.Logging.Logger">
+      <Alias>Logger</Alias>
+    </Using>
+    <Using Include="Rocket.Core.Plugins" />
+    <Using Include="Rocket.Unturned.Enumerations" />
+    <Using Include="Rocket.Unturned.Player" />
+    <Using Include="SDG.NetTransport" />
+    <Using Include="SDG.Unturned" />
+    <Using Include="Steamworks" />
+    <Using Include="System.Collections" />
+    <Using Include="UnityEngine" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="SET &quot;sourcedir=$(OutDir)&#xD;&#xA;XCOPY /v /y &quot;%25sourcedir%25\$(ProjectName).dll*&quot; &quot;C:\SteamCMD\steamapps\common\U3DS\Servers\TestServer\Rocket\Plugins\$(ProjectName).dll*&quot;&#xD;&#xA;XCOPY /v /y &quot;%25sourcedir%25\$(ProjectName).pdb*&quot; &quot;C:\SteamCMD\steamapps\common\U3DS\Servers\TestServer\Rocket\Plugins\$(ProjectName).pdb*&quot;&#xD;&#xA;XCOPY /v /y &quot;%25sourcedir%25\$(ProjectName).xml*&quot; &quot;C:\SteamCMD\steamapps\common\U3DS\Servers\TestServer\Rocket\Plugins\$(ProjectName).xml*&quot;&#xD;&#xA;FOR %25%25a IN (&quot;C:\SteamCMD\steamapps\common\U3DS\Servers\TestServer\Rocket\Plugins\$(ProjectName)\*&quot;) DO DEL &quot;%25%25a&quot;" />
+  </Target>
+</Project>
